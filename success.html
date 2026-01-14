@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Success</title>
+  <style>
+    body {
+      background: black;
+      color: lime;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div>
+  <h1>ACCESS GRANTED</h1>
+  <p id="user"></p>
+  <p>You successfully logged in.</p>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const user = params.get("user");
+  document.getElementById("user").innerText = "Logged in as: " + user;
+</script>
+
+</body>
+</html>
