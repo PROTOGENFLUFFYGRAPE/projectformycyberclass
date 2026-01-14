@@ -13,69 +13,101 @@
       align-items: center;
       height: 100vh;
     }
+
+   
+    #errorBubble {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #b00020;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 6px;
+      display: none;
+      font-size: 14px;
+      box-shadow: 0 0 10px black;
+      z-index: 1000;
+    }
+
     .box {
       background: #111;
       padding: 20px;
       border-radius: 8px;
       width: 300px;
     }
+
     input, button {
       width: 100%;
       margin-top: 10px;
       padding: 8px;
     }
+
     button {
       background: #5c5cff;
       color: white;
       border: none;
       cursor: pointer;
     }
-    .error {
-      color: red;
-      margin-top: 10px;
-    }
   </style>
 </head>
 <body>
+
+<div id="errorBubble"></div>
 
 <div class="box">
   <h2>Login</h2>
   <input id="user" placeholder="Username">
   <input id="pass" type="password" placeholder="Password">
   <button onclick="login()">Login</button>
-  <div id="msg" class="error"></div>
 </div>
 
 <script>
-function login() {
-  const username = document.getElementById("user").value.trim();
-  const password = document.getElementById("pass").value.trim();
-  const msg = document.getElementById("msg");
+function showError(message) {
+  const bubble = document.getElementById("errorBubble");
+  bubble.innerText = message;
+  bubble.style.display = "block";
 
-  // EXPLICIT usernames and passwords
-  const validUsers = [
-    { username: "admin",   password: "admin123" },
-    { username: "founder", password: "founder123" }
-  ];
-
-  if (!username || !password) {
-    msg.innerText = "Username and password are required";
-    return;
-  }
-
-  // Check credentials
-  const match = validUsers.find(
-    user => user.username === username && user.password === password
-  );
-
-  if (!match) {
-    msg.innerText = "Invalid username or password";
-    return;
-  }
-
-  // Success
-  window.location.href = "success.html?user=" + encodeURIComponent(username);
+  setTimeout(() => {
+    bubble.style.display = "none";
+  }, 4000);
 }
+
+function login() {
+  try {
+    const username = document.getElementById("user").value.trim();
+    const password = document.getElementById("pass").value.trim();
+
+    const validUsers = [
+      { username: "admin",   password: "admin123" },
+      { username: "founder", password: "founder123" }
+    ];
+
+    if (!username || !password) {
+      showError("Username and password are required");
+      return;
+    }
+
+    const match = validUsers.find(
+      u => u.username === username && u.password === password
+    );
+
+    if (!match) {
+      showError("Invalid username or password");
+      return;
+    }
+
+    window.location.href = "success.html?user=" + encodeURIComponent(username);
+
+  } catch (err) {
+    showError("Error: " + err.message);
+  }
+}
+
+  
+window.onerror = function(message, source, line, col) {
+  showError(`Script error: ${message} (line ${line})`);
+};
 </script>
 
 </body>
