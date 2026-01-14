@@ -48,20 +48,35 @@
 
 <script>
 function login() {
-  const username = document.getElementById("user").value;
-  const password = document.getElementById("pass").value;
+  const username = document.getElementById("user").value.trim();
+  const password = document.getElementById("pass").value.trim();
+  const msg = document.getElementById("msg");
 
- 
+  
   const accounts = {
-    admin: "admin",
-    founder: "founder"
+    admin: "admin123",
+    founder: "founder123"
   };
 
-  if (accounts[username] && accounts[username] === password) {
-    window.location.href = "success.html?user=" + username;
-  } else {
-    document.getElementById("msg").innerText = "Invalid username or password";
+  
+  if (!username || !password) {
+    msg.innerText = "Username and password are required";
+    return;
   }
+
+  
+  if (!accounts[username]) {
+    msg.innerText = "Invalid username or password";
+    return;
+  }
+
+  if (accounts[username] !== password) {
+    msg.innerText = "Invalid username or password";
+    return;
+  }
+
+
+  window.location.href = "success.html?user=" + encodeURIComponent(username);
 }
 </script>
 
